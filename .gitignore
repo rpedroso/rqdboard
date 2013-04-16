@@ -33,3 +33,12 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# web2py
+uploads
+sessions
+private
+language
+errors
+databases
+cron

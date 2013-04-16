@@ -1,0 +1,82 @@
+{{ extend 'layout.html' }}
+
+{{ block center }}
+
+<div class="row-fluid">
+    <div class="span12">
+        <a href="{{ =URL(request.function) }}" class="btn btn-small"><i
+                class="icon-arrow-left"></i>{{ =T(' Home') }}</a>
+        <a href="{{ =URL(args=[]) }}" class="btn btn-small btn-success"
+            onclick="refresh_components();return false"><i
+                class="icon-refresh icon-white"></i>{{ =T(' Refresh All') }}</a>
+    </div>
+</div>
+
+<div class="row-fluid">
+    <div class="span6">
+        <h1>Queues</h1>
+        <p>This list below contains all
+            the registered queues with the number of jobs currently
+            in the queue. Select a queue from above to view all jobs
+            currently pending on the queue.
+        </p>
+
+        {{ =LOAD(f=request.function, args=['queues_table'], ajax=False,
+                    ajax_trap=True, target='queues_component') }}
+    </div>
+
+    <div class="span6">
+        <h1>Workers</h1>
+        <p>This list below contains all the registered workers.</p>
+
+        {{ =LOAD(f=request.function, args=['workers_table'], ajax=False,
+                    ajax_trap=True, target='workers_component') }}
+    </div>
+</div>
+
+<div class="row-fluid">
+    <div class="span12">
+        <h1>Jobs on <strong{{ if rqdb_queue_name == 'failed': }}
+            class="failed"{{ pass }}>{{ =rqdb_queue_name }}</strong></h1>
+        <p>
+        <div class="pull-right">
+            {{ =LOAD(f=request.function,
+                args=['queue_actions_buttons', rqdb_queue_name],
+                ajax=False, ajax_trap=False) }}
+        </div>
+
+        This list below contains all the registered jobs on queue
+        <strong>{{ =rqdb_queue_name }}</strong>, sorted by age (oldest on top).
+        </p>
+
+        {{ =LOAD(f=request.function, args=['job_table', rqdb_queue_name],
+                ajax=False, ajax_trap=True, target="jobs_component") }}
+    </div>
+</div>
+
+<div class="row-fluid">
+    <div class="span12">
+        <a href="{{ =URL('index') }}" class="btn btn-small"><i
+                class="icon-arrow-left"></i>{{ =T(' Home') }}</a>
+        <a href="{{ =URL(args=[]) }}" class="btn btn-small btn-success"
+            onclick="refresh_components();return false"><i
+                class="icon-refresh icon-white"></i>{{ =T(' Refresh All') }}</a>
+    </div>
+</div>
+<script>
+var refresh_components = function() {
+    web2py_component("{{ =URL(f=request.function, args=['queues_table']) }}",
+                        "queues_component");
+    web2py_component("{{ =URL(f=request.function, args=['workers_table']) }}",
+                        "workers_component");
+    web2py_component("{{ =URL(f=request.function, args=['job_table', rqdb_queue_name]) }}",
+                        "jobs_component");
+}
+
+$(document).ready(function() {
+    {{ if poll_interval is not None: }}
+    setInterval(refresh_components, {{ =poll_interval }});
+    {{ pass }}
+});
+</script>
+{{ end }}

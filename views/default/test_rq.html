@@ -1,0 +1,10 @@
+{{ extend 'layout.html' }}
+
+{{ block center }}
+    {{ if form is None: }}
+        You have a job, please check...
+        <a href="{{ =URL('test_rq_result') }}" >{{ =session.job_id }}</a>
+    {{ else: }}
+        {{ =form }}
+    {{ pass }}
+{{ end }}
