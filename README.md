@@ -1,6 +1,6 @@
 rqdboard
 ========
 
-RQ dashboard for web2py plugin + application example.
+RQ dashboard plugin for web2py + application example.
 
 Example is not fully working at the moment.
