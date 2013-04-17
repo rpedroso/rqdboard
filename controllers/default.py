@@ -16,9 +16,9 @@ def index():
 
 
 def test_rq():
-    # do not put rqmsg in <app>/modules
-    # put it in your web2py/site-packages or in your python site-packages
-    import rqmsg
+    from redis import Redis
+    from redis.exceptions import ConnectionError
+    from rq import Queue
 
     if session.job_id is None:
         form = SQLFORM.factory(
@@ -30,8 +30,11 @@ def test_rq():
                 )
 
         if form.process().accepted:
-            job = rqmsg.RQMsg().enqueue('event_calc', form.vars.calc_fibonacci)
-            if job is None:
+            q = Queue(connection=Redis())
+            try:
+                job = q.enqueue_call(func='jobs.calc_fibonacci.slow_fib',
+                                    args=(form.vars.calc_fibonacci,))
+            except ConnectionError:
                 redirect(URL('redis_down'))
             else:
                 session.job_id = job.id
@@ -43,14 +46,14 @@ def test_rq():
 
 
 def test_rq_result():
-    # do not put rqmsg in <app>/modules
-    # put it in your web2py/site-packages or in your python site-packages
-    import rqmsg
+    from redis import Redis
+    from redis.exceptions import ConnectionError
+    from rq.job import Job
 
     try:
-        job = rqmsg.RQMsg().get_job(session.job_id)
-    except rqmsg.ConnectionError:
-        redirect(URL('redis_down'))
+        job = Job.fetch(session.job_id, Redis())
+    except ConnectionError:
+        job = None
 
     if job is None:
         session.job_id = job = None
