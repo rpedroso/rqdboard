@@ -1,0 +1,20 @@
+{{ extend 'layout.html' }}
+
+{{ block center }}
+
+    {{ if job is None: }}
+        <p>You dont have a job...
+        <a href="{{ =URL('test_rq_in_model') }}">Get one first</a></p>
+    {{ else: }}
+        <h2>Status: {{ =job.status }}</h2>
+
+        {{ if job.is_finished: }}
+            <h2>Result: {{ =job.result }}</h2>
+            <a href="{{ =URL('test_rq_in_model') }}">Get another job</a>
+        {{ else: }}
+            <p>keep refreshing your browser to check the result</p>
+        {{ pass }}
+
+    {{ pass }}
+
+{{ end }}

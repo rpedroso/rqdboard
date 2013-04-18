@@ -1,0 +1,26 @@
+{{ extend 'layout.html' }}
+
+{{ block center }}
+    <h3>Calls a function in a model</h3>
+    <p>In this example calls the function slow_fib() in models/jobs.py</p>
+    <p>
+        Calling instance methods is only supported passing the call
+        as a string. Example:
+    </p>
+
+    <pre><code>
+        from rqw import RQW
+        job = RQW().enqueue('mail.send', args=(['me@example.com']))
+    </code></pre>
+    <strong>RQW</strong>
+    <p>is a class that serves as a `proxy` to be able to call functions in
+    models.<br>
+    The rqw.py module can be found in modules/rqw.py</p>
+
+    {{ if form is None: }}
+        You have a job, please check...
+        <a href="{{ =URL('test_rq_in_model_result') }}" >{{ =session.job_id }}</a>
+    {{ else: }}
+        {{ =form }}
+    {{ pass }}
+{{ end }}

@@ -1,6 +1,9 @@
 {{ extend 'layout.html' }}
 
 {{ block center }}
+    <h3>Calls a function in a specific module</h3>
+    <p>In this example calls the function slow_fib() in the module jobs/calc_fibonacci.py</p>
+
     {{ if form is None: }}
         You have a job, please check...
         <a href="{{ =URL('test_rq_result') }}" >{{ =session.job_id }}</a>

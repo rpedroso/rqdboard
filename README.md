@@ -14,8 +14,8 @@ Put this application in web2py applications folder
 ```console
 $ cd <web2py_folder>/applications
 $ git clone https://github.com/rpedroso/rqdboard
-$ cd rqdboard
-$ python rq_worker.py
+$ cd <web2py_folder>
+$ python applications/rqdboard/rq_worker.py
 ```
 
 Start web2py

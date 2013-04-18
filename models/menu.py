@@ -15,6 +15,7 @@ response.meta.keywords = ''
 response.meta.generator = ''
 
 response.menu = [
-    ('Home', False, URL('default', 'index'), []),
+    ('Job in a model', False, URL('default', 'test_rq_in_model'), []),
+    ('Job in a module', False, URL('default', 'test_rq'), []),
     ('Dashboard', False, URL('default', 'dashboard'), [])
 ]
